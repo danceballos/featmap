@@ -52,6 +52,8 @@ _testmain.go
 
 /conf.json
 /.env
+*.env.*
+conf.json.*
 /webapp/build
 /bin
 /data
