@@ -1,9 +1,16 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"strings"
 	"time"
 )
+
+func sha256Hex(s string) string {
+	h := sha256.Sum256([]byte(s))
+	return hex.EncodeToString(h[:])
+}
 
 func subHasExpired(s *Subscription) bool {
 	b := s.ExpirationDate.Before(time.Now().UTC())

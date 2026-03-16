@@ -11,6 +11,7 @@ type Workspace struct {
 	ExternalCustomerID   string    `db:"external_customer_id" json:"-"`
 	EUVAT                string    `db:"eu_vat" json:"euVat"`
 	ExternalBillingEmail string    `db:"external_billing_email" json:"externalBillingEmail"`
+	ClaudeAPIKeyHash     string    `db:"claude_api_key_hash" json:"-"`
 }
 
 // Account ...

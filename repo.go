@@ -17,6 +17,8 @@ type Repository interface {
 	GetWorkspace(workspaceID string) (*Workspace, error)
 	GetWorkspacesByAccount(id string) ([]*Workspace, error)
 	GetWorkspaceByName(name string) (*Workspace, error)
+	GetWorkspaceByClaudeAPIKeyHash(hash string) (*Workspace, error)
+	SetClaudeAPIKeyHash(workspaceID string, hash string) error
 	DeleteWorkspace(workspaceID string)
 
 	GetAccount(id string) (*Account, error)
@@ -152,6 +154,19 @@ func (a *repo) GetWorkspaceByName(name string) (*Workspace, error) {
 		return nil, errors.Wrap(err, "workspace not found")
 	}
 	return workspace, nil
+}
+
+func (a *repo) GetWorkspaceByClaudeAPIKeyHash(hash string) (*Workspace, error) {
+	workspace := &Workspace{}
+	if err := a.tx.Get(workspace, "SELECT * FROM workspaces WHERE claude_api_key_hash = $1", hash); err != nil {
+		return nil, errors.Wrap(err, "workspace not found")
+	}
+	return workspace, nil
+}
+
+func (a *repo) SetClaudeAPIKeyHash(workspaceID string, hash string) error {
+	_, err := a.tx.Exec("UPDATE workspaces SET claude_api_key_hash = $1 WHERE id = $2", hash, workspaceID)
+	return err
 }
 
 func (a *repo) GetWorkspacesByAccount(id string) ([]*Workspace, error) {

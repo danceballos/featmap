@@ -89,6 +89,9 @@ type Service interface {
 	AcceptInvite(code string) error
 	GetInvite(code string) (*Invite, error)
 
+	GetWorkspaceByClaudeAPIKey(rawKey string) (*Workspace, error)
+	SetClaudeAPIKey(workspaceID string, rawKey string) error
+
 	GetProjectByExternalLink(link string) (*Project, error)
 	GetProjectExtendedByExternalLink(link string) (*projectResponse, error)
 	GetProject(id string) *Project
@@ -452,6 +455,20 @@ func (s *service) GetWorkspaceByContext() *Workspace {
 		log.Println(err)
 	}
 	return workspace
+}
+
+func (s *service) GetWorkspaceByClaudeAPIKey(rawKey string) (*Workspace, error) {
+	hash := sha256Hex(rawKey)
+	workspace, err := s.r.GetWorkspaceByClaudeAPIKeyHash(hash)
+	if err != nil {
+		return nil, errors.Wrap(err, "invalid API key")
+	}
+	return workspace, nil
+}
+
+func (s *service) SetClaudeAPIKey(workspaceID string, rawKey string) error {
+	hash := sha256Hex(rawKey)
+	return s.r.SetClaudeAPIKeyHash(workspaceID, hash)
 }
 
 func (s *service) GetWorkspaces() []*Workspace {

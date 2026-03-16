@@ -63,7 +63,7 @@ func main() {
 	corsConfiguration := cors.New(cors.Options{
 		AllowedOrigins:   []string{config.AppSiteURL, "http://localhost:3000"}, // localhost is for development work
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "Workspace", "X-CSRF-Token"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "Workspace", "X-CSRF-Token", "X-API-Key"},
 		ExposedHeaders:   []string{""},
 		AllowCredentials: true,
 		MaxAge:           300,
@@ -122,6 +122,7 @@ func main() {
 	r.Route("/v1/subscription", subscriptionAPI) // Nothing is needed
 
 	r.Route("/v1/account", accountAPI) // Account needed
+	r.Route("/v1/claude", claudeAPI)   // API key auth (or JWT+Admin for key generation)
 	r.Route("/v1/", workspaceAPI)      // Account + workspace is needed
 
 	files := &assetfs.AssetFS{

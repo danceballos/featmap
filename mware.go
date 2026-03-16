@@ -274,6 +274,34 @@ func requireChangeableSubscription() func(next http.Handler) http.Handler {
 	}
 }
 
+// RequireAPIKey authenticates requests using the X-API-Key header.
+// It resolves the workspace from the hashed key and injects it into the service context.
+func RequireAPIKey() func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		fn := func(w http.ResponseWriter, r *http.Request) {
+			rawKey := r.Header.Get("X-API-Key")
+			if rawKey == "" {
+				http.Error(w, http.StatusText(401), 401)
+				return
+			}
+
+			s := GetEnv(r).Service
+			ws, err := s.GetWorkspaceByClaudeAPIKey(rawKey)
+			if err != nil {
+				http.Error(w, http.StatusText(401), 401)
+				return
+			}
+
+			s.SetWorkspaceObject(ws)
+			s.SetMemberObject(&Member{WorkspaceID: ws.ID})
+
+			ctx := context.WithValue(r.Context(), contextKey, &Env{Service: s})
+			next.ServeHTTP(w, r.WithContext(ctx))
+		}
+		return http.HandlerFunc(fn)
+	}
+}
+
 func requireDeleteableWorkspace() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
