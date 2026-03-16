@@ -63,3 +63,4 @@ conf.json.*
 workspace.xml
 featmap
 **/bindata.go
+node_modules

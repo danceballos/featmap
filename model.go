@@ -102,6 +102,7 @@ type Milestone struct {
 	LastModifiedByName string    `db:"last_modified_by_name" json:"lastModifiedByName"`
 	Color              string    `db:"color" json:"color"`
 	Annotations        string    `db:"annotations" json:"annotations"`
+	CardType           string    `db:"card_type" json:"cardType"`
 }
 
 // Workflow ...
@@ -119,6 +120,7 @@ type Workflow struct {
 	Color              string    `db:"color" json:"color"`
 	Status             string    `db:"status" json:"status"`
 	Annotations        string    `db:"annotations" json:"annotations"`
+	CardType           string    `db:"card_type" json:"cardType"`
 }
 
 // SubWorkflow ...
@@ -136,6 +138,7 @@ type SubWorkflow struct {
 	Color              string    `db:"color" json:"color"`
 	Status             string    `db:"status" json:"status"`
 	Annotations        string    `db:"annotations" json:"annotations"`
+	CardType           string    `db:"card_type" json:"cardType"`
 }
 
 // Feature ...
@@ -155,6 +158,7 @@ type Feature struct {
 	Color              string    `db:"color" json:"color"`
 	Annotations        string    `db:"annotations" json:"annotations"`
 	Estimate           int       `db:"estimate" json:"estimate"`
+	CardType           string    `db:"card_type" json:"cardType"`
 }
 
 // FeatureComment ...
