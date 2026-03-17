@@ -12,6 +12,7 @@ import { personaBarState } from '../core/misc';
 import { IPersona } from '../store/personas/types';
 import { avatar } from '../avatars';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { getPersona } from '../store/personas/selectors';
 import { updatePersonaAction, deletePersonaAction, createPersonaAction } from '../store/personas/actions';
 import { createWorkflowPersonaAction } from '../store/workflowpersonas/actions';
@@ -301,7 +302,7 @@ class Personas extends Component<Props, State> {
 
                                   <div className="mt-2">
                                     <div className="markdown-body  text-white">
-                                      <ReactMarkdown children={p.description} linkTarget="_blank" />
+                                      <ReactMarkdown remarkPlugins={[remarkGfm]} children={p.description} linkTarget="_blank" />
                                     </div>
                                   </div>
 

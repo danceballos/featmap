@@ -28,6 +28,7 @@
     "react-scripts": "4.0.3",
     "react-timeago": "^6.2.1",
     "redux": "^4.1.0",
+    "remark-gfm": "^1.0.0",
     "reselect": "^4.0.0",
     "stripe": "^8.161.0",
     "typesafe-actions": "^5.1.0",

@@ -47,18 +47,3 @@ services:
                 depends_on:
                         featmap:
                                 condition: service_healthy
-
-        featmap-mcp:
-                build:
-                        context: ./featmap-mcp
-                        dockerfile: Dockerfile
-                restart: always
-                ports:
-                        - "3000:3000"
-                environment:
-                        FEATMAP_BASE_URL: http://featmap:5000
-                        FEATMAP_API_KEY: ${FEATMAP_MCP_API_KEY}
-                        MCP_PORT: 3000
-                depends_on:
-                        - featmap
-

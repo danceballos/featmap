@@ -21,6 +21,7 @@ import { IWorkflow } from '../store/workflows/types';
 import { IFeature } from '../store/features/types';
 import onClickOutside from "react-onclickoutside";
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Button } from './elements';
 import { IProject } from '../store/projects/types';
 
@@ -281,7 +282,7 @@ class EntityDetailsDescription extends Component<Props, State> {
                                                 :
                                                 <div>
                                                     <div className="text-left markdown-body overflow-auto">
-                                                        <ReactMarkdown children={this.props.entity.description} linkTarget="_blank" />
+                                                        <ReactMarkdown remarkPlugins={[remarkGfm]} children={this.props.entity.description} linkTarget="_blank" />
                                                     </div>
                                                 </div>
                                             }

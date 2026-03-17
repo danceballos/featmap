@@ -5,6 +5,7 @@ import { IMembership } from '../store/application/types';
 import ContextMenu from './ContextMenu';
 import { Button } from './elements';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Formik, FormikHelpers as FormikActions, FormikProps, Form, Field, FieldProps } from 'formik';
 import * as Yup from 'yup';
 
@@ -113,7 +114,7 @@ class Comment extends Component<Props, State> {
             </Formik>
             :
             <div className="markdown-body">
-              <ReactMarkdown children={this.props.comment.post} linkTarget="_blank" />
+              <ReactMarkdown remarkPlugins={[remarkGfm]} children={this.props.comment.post} linkTarget="_blank" />
             </div>
         }
 
