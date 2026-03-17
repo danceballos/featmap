@@ -1,0 +1,28 @@
+---
+description: Auth middleware must set full service context (Workspace, Member, Account) so write handlers don't panic
+globs: mware.go, claude-api.go, service.go
+alwaysApply: false
+---
+
+# Auth and service context
+
+The `service` struct has `Acc` (Account), `Member`, and `Workspace`. Many handlers use `s.Acc.Name` (and similar) for `lastModifiedByName` / `createdByName`. If a request is authenticated via a path that does **not** set `s.Acc`, those handlers will panic (nil pointer or equivalent).
+
+## Rule
+
+**Any auth middleware that calls `SetWorkspaceObject` and `SetMemberObject` must also call `SetAccountObject`** with a valid (possibly synthetic) Account when downstream handlers perform writes that use `s.Acc`.
+
+## Example (RequireAPIKey)
+
+```go
+// ✅ Correct: API key auth sets workspace, member, AND account
+s.SetWorkspaceObject(ws)
+s.SetMemberObject(&Member{WorkspaceID: ws.ID})
+s.SetAccountObject(&Account{Name: "Claude (API)"})
+```
+
+If you add a new auth path (e.g. another API key or machine auth), set all three. If you add a new handler under an existing auth path, ensure that path sets `s.Acc` before any code that uses `s.Acc.Name`, `s.Acc.ID`, etc.
+
+## Where it matters
+
+Handlers that use `s.Acc` include: feature/description update, status, annotations, create feature, move, comments, and most other write operations in `service.go`. Read-only handlers (e.g. get projects, get features) may not need it.

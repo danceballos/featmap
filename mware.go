@@ -294,6 +294,8 @@ func RequireAPIKey() func(next http.Handler) http.Handler {
 
 			s.SetWorkspaceObject(ws)
 			s.SetMemberObject(&Member{WorkspaceID: ws.ID})
+			// Required: write handlers use s.Acc.Name for lastModifiedByName (see .cursor/rules/auth-service-context.mdc)
+			s.SetAccountObject(&Account{Name: "Claude (API)"})
 
 			ctx := context.WithValue(r.Context(), contextKey, &Env{Service: s})
 			next.ServeHTTP(w, r.WithContext(ctx))
